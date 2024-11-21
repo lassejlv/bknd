@@ -89,7 +89,7 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "tsup": {
-    "entry": ["src/index.ts", "src/ui/index.ts", "src/data/index.ts", "src/core/index.ts", "src/core/utils/index.ts"],
+    "entry": ["src/index.ts", "src/ui/index.ts", "src/ui/react/index.ts", "src/data/index.ts", "src/core/index.ts", "src/core/utils/index.ts"],
     "minify": true,
     "outDir": "dist",
     "external": ["bun:test"],
@@ -119,6 +119,11 @@
       "types": "./dist/ui/index.d.ts",
       "import": "./dist/ui/index.js",
       "require": "./dist/ui/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/ui/react/index.d.ts",
+      "import": "./dist/ui/react/index.js",
+      "require": "./dist/ui/react/index.cjs"
     },
     "./data": {
       "types": "./dist/data/index.d.ts",
