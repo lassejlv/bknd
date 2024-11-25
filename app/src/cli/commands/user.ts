@@ -66,17 +66,17 @@ async function create(app: App, options: any) {
 
    try {
       const mutator = app.modules.ctx().em.mutator(users_entity);
-      mutator.__unstable_toggleSystemEntityCreation(true);
+      mutator.__unstable_toggleSystemEntityCreation(false);
       const res = await mutator.insertOne({
          email,
          strategy: "password",
          strategy_value: await strategy.hash(password as string)
       });
-      mutator.__unstable_toggleSystemEntityCreation(false);
+      mutator.__unstable_toggleSystemEntityCreation(true);
 
       console.log("Created:", res.data);
    } catch (e) {
-      console.error("Error");
+      console.error("Error", e);
    }
 }
 

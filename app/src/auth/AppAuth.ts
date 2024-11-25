@@ -1,6 +1,6 @@
 import { type AuthAction, Authenticator, type ProfileExchange, Role, type Strategy } from "auth";
 import { Exception } from "core";
-import { Const, StringRecord, Type, transformObject } from "core/utils";
+import { transformObject } from "core/utils";
 import {
    type Entity,
    EntityIndex,
@@ -263,7 +263,17 @@ export class AppAuth extends Module<typeof authConfigSchema> {
          return this.configDefault;
       }
 
-      // fixes freezed config object
-      return mergeWith({ ...this.config }, this.authenticator.toJSON(secrets));
+      const obj = {
+         ...this.config,
+         ...this.authenticator.toJSON(secrets)
+      };
+
+      return {
+         ...obj,
+         jwt: {
+            ...obj.jwt,
+            fields: this.config.jwt.fields
+         }
+      };
    }
 }

@@ -115,6 +115,15 @@ export const AuthSettings = ({ schema: _unsafe_copy, config }) => {
                      schema={_schema}
                      uiSchema={uiSchema}
                      config={config}
+                     options={{
+                        showAlert: (config: any) => {
+                           if (!config.enabled) {
+                              return "Auth is disabled. Enable it by toggling the switch below. Please also make sure set a secure secret to sign JWT tokens.";
+                           }
+                           return;
+                        },
+                        reloadOnSave: true
+                     }}
                      properties={{
                         strategies: {
                            extract: true,

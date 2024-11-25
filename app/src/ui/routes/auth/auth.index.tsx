@@ -1,4 +1,6 @@
 import { useBknd, useClient } from "ui/client";
+import { useBkndAuth } from "ui/client/schema/auth/use-bknd-auth";
+import { Alert } from "ui/components/display/Alert";
 import { routes } from "ui/lib/routes";
 import {
    Button,
@@ -10,15 +12,13 @@ import * as AppShell from "../../layouts/AppShell/AppShell";
 
 export function AuthIndex() {
    const client = useClient();
-   const { app, config } = useBknd();
-   const users_entity = config.auth.entity_name;
+   const { app } = useBknd();
+   const {
+      config: { roles, strategies, entity_name, enabled }
+   } = useBkndAuth();
+   const users_entity = entity_name;
    const query = client.query().data.entity("users").count();
    const usersTotal = query.data?.body.count ?? 0;
-   const {
-      config: {
-         auth: { roles, strategies }
-      }
-   } = useBknd();
    const rolesTotal = Object.keys(roles ?? {}).length ?? 0;
    const strategiesTotal = Object.keys(strategies ?? {}).length ?? 0;
 
@@ -30,11 +30,16 @@ export function AuthIndex() {
       <>
          <AppShell.SectionHeader>Overview</AppShell.SectionHeader>
          <AppShell.Scrollable>
+            <Alert.Warning
+               visible={!enabled}
+               title="Auth not enabled"
+               message="To use authentication features, please enable it in the settings."
+            />
             <div className="flex flex-col flex-grow p-3 gap-3">
                <div className="grid xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
                   <KpiCard
                      title="Users registered"
-                     value={usersTotal}
+                     value={!enabled ? 0 : usersTotal}
                      actions={[
                         {
                            label: "View all",
@@ -45,7 +50,7 @@ export function AuthIndex() {
                   />
                   <KpiCard
                      title="Roles"
-                     value={rolesTotal}
+                     value={!enabled ? 0 : rolesTotal}
                      actions={[
                         { label: "View all", href: rolesLink },
                         { label: "Add new", variant: "default", href: rolesLink }
@@ -53,7 +58,7 @@ export function AuthIndex() {
                   />
                   <KpiCard
                      title="Strategies enabled"
-                     value={strategiesTotal}
+                     value={!enabled ? 0 : strategiesTotal}
                      actions={[
                         { label: "View all", href: strategiesLink },
                         { label: "Add new", variant: "default", href: strategiesLink }

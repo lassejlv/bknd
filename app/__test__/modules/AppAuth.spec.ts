@@ -19,7 +19,7 @@ describe("AppAuth", () => {
       await auth.build();
 
       const config = auth.toJSON();
-      expect(config.jwt).toBeUndefined();
+      expect(config.jwt.secret).toBeUndefined();
       expect(config.strategies.password.config).toBeUndefined();
    });
 

@@ -3,6 +3,7 @@ import type { Entity, EntityData } from "data";
 import type { EntityRelation } from "data";
 import { Fragment, memo, useState } from "react";
 import { TbArrowLeft, TbDots } from "react-icons/tb";
+import { useBkndData } from "ui/client/schema/data/use-bknd-data";
 import { EntityForm } from "ui/modules/data/components/EntityForm";
 import { EntityTable2 } from "ui/modules/data/components/EntityTable2";
 import { useEntityForm } from "ui/modules/data/hooks/useEntityForm";
@@ -20,17 +21,17 @@ import { routes, useNavigate } from "../../lib/routes";
 import { bkndModals } from "../../modals";
 
 export function DataEntityUpdate({ params }) {
-   const { app } = useBknd();
-   const entity = app.entity(params.entity as string)!;
+   const { $data, relations } = useBkndData();
+   const entity = $data.entity(params.entity as string)!;
    const entityId = Number.parseInt(params.id as string);
    const [error, setError] = useState<string | null>(null);
    const [navigate] = useNavigate();
    useBrowserTitle(["Data", entity.label, `#${entityId}`]);
-   const targetRelations = app.relations.listableRelationsOf(entity);
-   console.log("targetRelations", targetRelations, app.relations.relationsOf(entity));
+   const targetRelations = relations.listableRelationsOf(entity);
+   //console.log("targetRelations", targetRelations, relations.relationsOf(entity));
    // filter out polymorphic for now
    //.filter((r) => r.type() !== "poly");
-   const local_relation_refs = app.relations
+   const local_relation_refs = relations
       .sourceRelationsOf(entity)
       ?.map((r) => r.other(entity).reference);
 

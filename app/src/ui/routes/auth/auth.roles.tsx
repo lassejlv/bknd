@@ -1,12 +1,7 @@
-import { Modal, TextInput } from "@mantine/core";
-import { useDisclosure, useFocusTrap } from "@mantine/hooks";
 import { StringIdentifier, transformObject, ucFirstAllSnakeToPascalWithSpaces } from "core/utils";
-import { useRef } from "react";
 import { useBkndAuth } from "ui/client/schema/auth/use-bknd-auth";
-import { JsonSchemaForm } from "ui/components/form/json-schema/JsonSchemaForm";
+import { Alert } from "ui/components/display/Alert";
 import { bkndModals } from "ui/modals";
-import { SchemaFormModal } from "ui/modals/debug/SchemaFormModal";
-import { useBknd } from "../../client/BkndProvider";
 import { Button } from "../../components/buttons/Button";
 import { CellValue, DataTable } from "../../components/table/DataTable";
 import * as AppShell from "../../layouts/AppShell/AppShell";
@@ -14,9 +9,6 @@ import { routes, useNavigate } from "../../lib/routes";
 
 export function AuthRolesList() {
    const [navigate] = useNavigate();
-   const [modalOpen, modalHandler] = useDisclosure(false);
-   const focusRef = useFocusTrap();
-   const inputRef = useRef<HTMLInputElement>(null);
    const { config, actions } = useBkndAuth();
 
    const data = Object.values(
@@ -64,27 +56,6 @@ export function AuthRolesList() {
 
    return (
       <>
-         {/*<Modal
-            ref={focusRef}
-            opened={modalOpen}
-            onClose={modalHandler.close}
-            title={"New Role"}
-            classNames={{
-               root: "bknd-admin",
-               header: "!bg-primary/5 border-b border-b-muted !py-3 px-5 !h-auto !min-h-px",
-               content: "rounded-lg select-none",
-               title: "font-bold !text-md",
-               body: "pt-3 pb-3 px-3 gap-4 flex flex-col"
-            }}
-         >
-            <TextInput ref={inputRef} data-autofocus size="md" placeholder="Enter role name" />
-            <div className="flex flex-row justify-end gap-2">
-               <Button onClick={() => modalHandler.close()}>Cancel</Button>
-               <Button variant="primary" onClick={handleClickAdd}>
-                  Create
-               </Button>
-            </div>
-         </Modal>*/}
          <AppShell.SectionHeader
             right={
                <Button variant="primary" onClick={openCreateModal}>
@@ -95,6 +66,11 @@ export function AuthRolesList() {
             Roles & Permissions
          </AppShell.SectionHeader>
          <AppShell.Scrollable>
+            <Alert.Warning
+               visible={!config.enabled}
+               title="Auth not enabled"
+               message="To use authentication features, please enable it in the settings."
+            />
             <div className="flex flex-col flex-grow p-3 gap-3">
                <DataTable
                   data={data}

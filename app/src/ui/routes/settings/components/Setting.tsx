@@ -4,6 +4,7 @@ import { omit } from "lodash-es";
 import { type ReactNode, useMemo, useRef, useState } from "react";
 import { TbSettings } from "react-icons/tb";
 import { useAuth } from "ui";
+import { Alert } from "ui/components/display/Alert";
 import { Link, Route, useLocation } from "wouter";
 import { useBknd } from "../../../client/BkndProvider";
 import { Button } from "../../../components/buttons/Button";
@@ -36,6 +37,7 @@ export type SettingProps<
       allowDelete?: (config: any) => boolean;
       allowEdit?: (config: any) => boolean;
       showAlert?: (config: any) => string | ReactNode | undefined;
+      reloadOnSave?: boolean;
    };
    properties?: {
       [key in keyof Partial<Props>]: {
@@ -151,6 +153,9 @@ export function Setting<Schema extends TObject = any>({
 
          console.log("save:success", success);
          if (success) {
+            if (options?.reloadOnSave) {
+               window.location.reload();
+            }
             //window.location.reload();
          } else {
             setSubmitting(false);
@@ -229,11 +234,7 @@ export function Setting<Schema extends TObject = any>({
             <Breadcrumbs path={path} />
          </AppShell.SectionHeader>
          <AppShell.Scrollable key={path.join("-")}>
-            {showAlert && (
-               <div className="flex flex-row dark:bg-amber-300/20 bg-amber-200 p-4">
-                  {showAlert}
-               </div>
-            )}
+            {typeof showAlert === "string" && <Alert.Warning message={showAlert} />}
 
             <div className="flex flex-col flex-grow p-3 gap-3">
                <JsonSchemaForm

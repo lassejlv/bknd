@@ -33,16 +33,22 @@ export function AuthRoot({ children }) {
                      <AppShell.SidebarLink
                         as={Link}
                         href={app.getAbsolutePath("/data/" + routes.data.entity.list(users_entity))}
+                        disabled={!config.auth.enabled}
                      >
                         Users
                      </AppShell.SidebarLink>
-                     <AppShell.SidebarLink as={Link} href={routes.auth.roles.list()}>
+                     <AppShell.SidebarLink
+                        as={Link}
+                        href={routes.auth.roles.list()}
+                        disabled={!config.auth.enabled}
+                     >
                         Roles & Permissions
                      </AppShell.SidebarLink>
                      <AppShell.SidebarLink as={Link} href={routes.auth.strategies()} disabled>
                         Strategies
                      </AppShell.SidebarLink>
-                     <AppShell.SidebarLink as={Link} href={routes.auth.settings()}>
+                     {/*<AppShell.SidebarLink as={Link} href={routes.auth.settings()}>*/}
+                     <AppShell.SidebarLink as={Link} href={app.getSettingsPath(["auth"])}>
                         Settings
                      </AppShell.SidebarLink>
                   </nav>

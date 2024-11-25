@@ -1,6 +1,6 @@
 import { Button } from "../buttons/Button";
 
-type EmptyProps = {
+export type EmptyProps = {
    Icon?: any;
    title?: string;
    description?: string;

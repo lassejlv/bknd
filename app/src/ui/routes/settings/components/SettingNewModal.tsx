@@ -70,9 +70,11 @@ export const SettingNewModal = ({
          const [module, ...restOfPath] = path;
          const addPath = [...restOfPath, newKey].join(".");
          if (await actions.add(module as any, addPath, data)) {
-            navigate(prefixPath + newKey, {
-               replace: true
-            });
+            setTimeout(() => {
+               navigate(prefixPath + newKey, {
+                  replace: true
+               });
+            }, 500);
          } else {
             setSubmitting(false);
          }

@@ -1,6 +1,9 @@
 import { Type } from "core/utils";
 import { querySchema } from "data";
 import { TbDots } from "react-icons/tb";
+import { useBkndData } from "ui/client/schema/data/use-bknd-data";
+import { Empty } from "ui/components/display/Empty";
+import { Message } from "ui/components/display/Message";
 import { EntityTable2 } from "ui/modules/data/components/EntityTable2";
 import { useBknd } from "../../client";
 import { Button } from "../../components/buttons/Button";
@@ -25,22 +28,21 @@ const searchSchema = Type.Composite(
 );
 
 export function DataEntityList({ params }) {
-   console.log("params", params);
-   const { app } = useBknd();
-   const entity = app.entity(params.entity as string)!;
+   const { $data, relations } = useBkndData();
+   const entity = $data.entity(params.entity as string);
    const [navigate] = useNavigate();
    const search = useSearch(searchSchema, {
-      select: entity.getSelect(undefined, "table"),
-      sort: entity.getDefaultSort()
+      select: entity?.getSelect(undefined, "table") ?? [],
+      sort: entity?.getDefaultSort()
    });
    console.log("search", search.value);
-   useBrowserTitle(["Data", entity.label]);
+   useBrowserTitle(["Data", entity?.label ?? params.entity]);
    const PER_PAGE_OPTIONS = [5, 10, 25];
 
    //console.log("search", search.value);
 
    function handleClickRow(row: Record<string, any>) {
-      navigate(routes.data.entity.edit(entity.name, row.id));
+      if (entity) navigate(routes.data.entity.edit(entity.name, row.id));
    }
 
    function handleClickPage(page: number) {
@@ -59,6 +61,10 @@ export function DataEntityList({ params }) {
    function handleClickPerPage(perPage: number) {
       // @todo: also reset page to 1
       search.set("perPage", perPage);
+   }
+
+   if (!entity) {
+      return <Message.NotFound description={`Entity "${params.entity}" doesn't exist.`} />;
    }
 
    return (
