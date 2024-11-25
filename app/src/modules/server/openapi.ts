@@ -85,6 +85,7 @@ function systemRoutes(config: ModuleConfigs): { paths: OAS.Document["paths"] } {
 }
 
 function dataRoutes(config: ModuleConfigs): { paths: OAS.Document["paths"] } {
+   const entities = Object.keys(config.data.entities ?? {}) ?? [];
    const schemas = {
       entityData: Type.Object({
          id: Type.Number() as any
@@ -115,7 +116,7 @@ function dataRoutes(config: ModuleConfigs): { paths: OAS.Document["paths"] } {
          name: "entity",
          in: "path",
          required: true,
-         schema: Type.String()
+         schema: entities.length > 0 ? Type.String({ enum: entities }) : Type.String()
       },
       entityId: {
          name: "id",

@@ -15,7 +15,7 @@ function SwaggerUI() {
          if (window.SwaggerUIBundle) {
             // @ts-ignore
             window.ui = window.SwaggerUIBundle({
-               url: "http://localhost:28623/api/system/openapi.json",
+               url: "/api/system/openapi.json",
                dom_id: "#swagger-ui"
             });
          }

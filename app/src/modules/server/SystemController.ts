@@ -280,8 +280,8 @@ export class SystemController implements ClassController {
       });
 
       hono.get("/openapi.json", async (c) => {
-         //const config = this.app.toJSON();
-         const config = JSON.parse(getDefaultConfig() as any);
+         const config = this.app.toJSON();
+         //const config = JSON.parse(getDefaultConfig() as any);
          return c.json(generateOpenAPI(config));
       });
 
