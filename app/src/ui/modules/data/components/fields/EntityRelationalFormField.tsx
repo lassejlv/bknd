@@ -10,8 +10,8 @@ import * as Formy from "ui/components/form/Formy";
 import { Popover } from "ui/components/overlay/Popover";
 import { useEntities } from "ui/container";
 import { routes } from "ui/lib/routes";
+import { EntityTable2 } from "ui/modules/data/components/EntityTable2";
 import { useLocation } from "wouter";
-import { EntityTable } from "../EntityTable";
 
 // @todo: allow clear if not required
 export function EntityRelationalFormField({
@@ -37,8 +37,8 @@ export function EntityRelationalFormField({
       field.target(),
       {
          limit: query.limit,
-         offset: (query.page - 1) * query.limit
-         //select: entity.getSelect(undefined, "form")
+         offset: (query.page - 1) * query.limit,
+         select: entity.getSelect(undefined, "table")
       },
       { enabled: true }
    );
@@ -197,28 +197,6 @@ export function EntityRelationalFormField({
             onChange={console.log}
             tabIndex={-1}
          />
-         {/*<Formy.Select
-            ref={ref}
-            name={fieldApi.name}
-            id={fieldApi.name}
-            value={fieldApi.state.value}
-            data-value={fieldApi.state.value}
-            onBlur={fieldApi.handleBlur}
-            onChange={handleUpdate}
-            disabled={!Array.isArray(container.data)}
-         >
-            {container.data ? (
-               <>
-                  {emptyOption}
-                  {!field.isRequired() && emptyOption}
-                  {container.data?.map(renderRow)}
-               </>
-            ) : (
-               <option value={undefined} disabled>
-                  Loading...
-               </option>
-            )}
-         </Formy.Select>*/}
       </Formy.Group>
    );
 }
@@ -244,10 +222,11 @@ const PopoverTable = ({ container, entity, query, toggle, onClickRow, onClickPag
 
    return (
       <div>
-         <EntityTable
+         <EntityTable2
             classNames={{ value: "line-clamp-1 truncate max-w-52 text-nowrap" }}
             data={container.data ?? []}
             entity={entity}
+            select={entity.getSelect(undefined, "table")}
             total={container.meta?.count}
             page={query.page}
             onClickRow={onClickRow}

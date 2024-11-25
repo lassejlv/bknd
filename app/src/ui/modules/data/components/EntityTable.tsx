@@ -44,6 +44,7 @@ type TableProps = {
    };
 };
 
+/** @deprecated use EntityTable2 instead */
 export const EntityTable: React.FC<TableProps> = ({
    data = [],
    entity,
